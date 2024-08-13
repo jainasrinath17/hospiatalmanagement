@@ -1,11 +1,9 @@
 # hospitalmanagement
 
-A sample backend service that interacts with database for create,update,delete operations
+A sample backend service that interacts with database for CRUD operations
 
 A backend for a hospital management system
 
-Added functionalities
+Added functionalities:
 
-Created API endpoints to add, update, delete doctors,patients,appointments and to book an appointment
-
-yet to refine to the business needs, 
+Created API endpoints to add, update, delete  doctors,patients,appointments and to book an appointment.

@@ -1,25 +1,41 @@
 package models
 
 import (
-    "gorm.io/gorm"
+	"hospitalmanagement/utils"
+
+	"gorm.io/gorm"
 )
 
 type Patient struct {
-    gorm.Model
-    Name    string `json:"name"`
-    Age     int    `json:"age"`
-    Address string `json:"address"`
-    Contact string `json:"contact"`
+	gorm.Model
+	UUID    string `json:"uuid" gorm:"type:varchar(20);unique"`
+	Name    string `json:"name"`
+	Age     int    `json:"age"`
+	Address string `json:"address"`
+	Contact string `json:"contact"`
 }
 
-// Create a new patient in the database
 func (p *Patient) CreatePatient(db *gorm.DB) error {
-    return db.Create(p).Error
+	p.UUID, _ = utils.GenerateRandomUUID()
+	return db.Create(p).Error
 }
 
-// Get all patients from the database
 func GetAllPatients(db *gorm.DB) ([]Patient, error) {
-    var patients []Patient
-    err := db.Find(&patients).Error
-    return patients, err
+	var patients []Patient
+	err := db.Find(&patients).Error
+	return patients, err
+}
+
+func GetPatientByUUID(db *gorm.DB, uuid string) (Patient, error) {
+	var patient Patient
+	err := db.First(&patient, "uuid = ?", uuid).Error
+	return patient, err
+}
+
+func UpdatePatientByUUID(db *gorm.DB, uuid string, updatedData Patient) error {
+	return db.Model(&Patient{}).Where("uuid = ?", uuid).Updates(updatedData).Error
+}
+
+func DeletePatientByUUID(db *gorm.DB, uuid string) error {
+	return db.Delete(&Patient{}, "uuid = ?", uuid).Error
 }

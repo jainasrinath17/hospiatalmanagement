@@ -12,29 +12,30 @@ func SetupRouter(db *gorm.DB) *gin.Engine {
 
 	controllers := controllers.Controller{DB: db}
 
-	apiV1 := router.Group("/patient")
+	p := router.Group("/patient")
 	{
-		apiV1.GET("/", controllers.GetPatients)
-		apiV1.POST("/", controllers.CreatePatient)
-		apiV1.GET("/:uuid", controllers.GetPatientByUUID)
-		apiV1.PATCH("/:uuid", controllers.UpdatePatientByUUID)
-		apiV1.DELETE("/:uuid", controllers.DeletePatientByUUID)
+		p.GET("/", controllers.GetPatients)
+		p.POST("/", controllers.CreatePatient)
+		p.GET("/:uuid", controllers.GetPatientByUUID)
+		p.PATCH("/:uuid", controllers.UpdatePatientByUUID)
+		p.DELETE("/:uuid", controllers.DeletePatientByUUID)
 	}
 
-	apiV2 := router.Group("/doctor")
+	d := router.Group("/doctor")
 	{
-		apiV2.GET("/", controllers.GetDoctors)
-		apiV2.POST("/", controllers.CreateDoctor)
-		apiV2.GET("/:uuid", controllers.GetDoctorByUUID)
-		apiV2.PATCH("/:uuid", controllers.UpdateDoctorByUUID)
-		apiV2.DELETE("/:uuid", controllers.DeleteDoctorByUUID)
+		d.GET("/", controllers.GetDoctors)
+		d.POST("/", controllers.CreateDoctor)
+		d.GET("/:uuid", controllers.GetDoctorByUUID)
+		d.PATCH("/:uuid", controllers.UpdateDoctorByUUID)
+		d.DELETE("/:uuid", controllers.DeleteDoctorByUUID)
 	}
 
-	apiV3 := router.Group("/appointments")
+	a := router.Group("/appointments")
 	{
-		apiV3.GET("/", controllers.GetAppointments)
-		apiV3.PATCH("/:uuid", controllers.UpdateAppointmentByUUID)
-		apiV3.POST("/", controllers.CreateAppointment)
+		a.GET("/", controllers.GetAppointments)
+		a.PATCH("/:uuid", controllers.UpdateAppointmentByUUID)
+		a.POST("/", controllers.CreateAppointment)
+		a.DELETE("/:uuid", controllers.DeleteAppointmentByUUID)
 	}
 
 	return router

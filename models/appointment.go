@@ -27,9 +27,9 @@ func GetAppointmentByUUID(db *gorm.DB, uuid string) (Appointment, error) {
     return appointment, err
 }
 
-func GetAllAppointments(db *gorm.DB) ([]Appointment, error) {
+func GetAllAppointments(db *gorm.DB, limit, offset int) ([]Appointment, error) {
     var appointments []Appointment
-    err := db.Preload("Patient").Preload("Doctor").Find(&appointments).Error
+    err := db.Preload("Patient").Preload("Doctor").Limit(limit).Offset(offset).Find(&appointments).Error
     return appointments, err
 }
 

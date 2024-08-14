@@ -3,17 +3,29 @@ package controllers
 import (
 	"hospitalmanagement/models"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
 
 func (pc *Controller) GetPatients(c *gin.Context) {
-	patients, err := models.GetAllPatients(pc.DB)
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		return
-	}
-	c.JSON(http.StatusOK, patients)
+    limit, err := strconv.Atoi(c.DefaultQuery("limit", "10"))
+    if err != nil {
+        c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid limit"})
+        return
+    }
+    offset, err := strconv.Atoi(c.DefaultQuery("offset", "0"))
+    if err != nil {
+        c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid offset"})
+        return
+    }
+
+    patients, err := models.GetAllPatients(pc.DB, limit, offset)
+    if err != nil {
+        c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+        return
+    }
+    c.JSON(http.StatusOK, patients)
 }
 
 func (pc *Controller) CreatePatient(c *gin.Context) {

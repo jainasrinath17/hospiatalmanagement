@@ -18,9 +18,9 @@ func (d *Doctor) CreateDoctor(db *gorm.DB) error {
 	return db.Create(d).Error
 }
 
-func GetAllDoctors(db *gorm.DB) ([]Doctor, error) {
+func GetAllDoctors(db *gorm.DB, limit, offset int) ([]Doctor, error) {
 	var doctors []Doctor
-	err := db.Find(&doctors).Error
+	err := db.Limit(limit).Offset(offset).Find(&doctors).Error
 	return doctors, err
 }
 

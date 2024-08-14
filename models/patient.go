@@ -20,10 +20,10 @@ func (p *Patient) CreatePatient(db *gorm.DB) error {
 	return db.Create(p).Error
 }
 
-func GetAllPatients(db *gorm.DB) ([]Patient, error) {
-	var patients []Patient
-	err := db.Find(&patients).Error
-	return patients, err
+func GetAllPatients(db *gorm.DB, limit, offset int) ([]Patient, error) {
+    var patients []Patient
+    err := db.Limit(limit).Offset(offset).Find(&patients).Error
+    return patients, err
 }
 
 func GetPatientByUUID(db *gorm.DB, uuid string) (Patient, error) {

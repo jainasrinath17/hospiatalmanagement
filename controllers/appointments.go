@@ -3,6 +3,7 @@ package controllers
 import (
 	"hospitalmanagement/models"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
@@ -13,12 +14,23 @@ type Controller struct {
 }
 
 func (ac *Controller) GetAppointments(c *gin.Context) {
-	appointments, err := models.GetAllAppointments(ac.DB)
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		return
-	}
-	c.JSON(http.StatusOK, appointments)
+    limit, err := strconv.Atoi(c.DefaultQuery("limit", "10"))
+    if err != nil {
+        c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid limit"})
+        return
+    }
+    offset, err := strconv.Atoi(c.DefaultQuery("offset", "0"))
+    if err != nil {
+        c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid offset"})
+        return
+    }
+
+    appointments, err := models.GetAllAppointments(ac.DB, limit, offset)
+    if err != nil {
+        c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+        return
+    }
+    c.JSON(http.StatusOK, appointments)
 }
 
 func (ac *Controller) CreateAppointment(c *gin.Context) {
